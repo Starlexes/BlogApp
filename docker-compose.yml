@@ -1,0 +1,13 @@
+services:
+    db:
+        image: postgres:latest
+        container_name: postgres_blog
+        restart: always
+        environment:
+            POSTGRES_DB: ${DB_DATABASE}
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+        ports:
+            - "5433:5432"
+        volumes:
+            - ./database/db-data:/data/db
