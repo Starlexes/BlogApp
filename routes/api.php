@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TranslateController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,5 +31,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'api'], function () {
         Route::put('{id}', [ArticleController::class, 'update']);
         Route::delete('{id}', [ArticleController::class, 'destroy']);
     });
+
+    Route::post('translate', [TranslateController::class, 'translate']);
 
 });
