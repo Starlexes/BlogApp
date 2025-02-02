@@ -42,7 +42,7 @@ class UserController extends Controller
         $validator = $this->validateUserData($data);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
+            return response()->json($validator->errors(), 400);
         }
 
         $userFactory = new UserFactory;
@@ -75,7 +75,7 @@ class UserController extends Controller
         $validator = $this->validateUserData($data);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
+            return response()->json($validator->errors(), 400);
         }
 
         $user = $this->em->find(User::class, $id);

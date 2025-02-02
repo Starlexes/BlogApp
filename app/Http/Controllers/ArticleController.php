@@ -46,7 +46,7 @@ class ArticleController extends Controller
         $validator = $this->validateArticleData($data);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
+            return response()->json($validator->errors(), 400);
         }
 
         $articleFactory = new ArticleFactory;
@@ -82,7 +82,7 @@ class ArticleController extends Controller
         $validator = $this->validateArticleData($data);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
+            return response()->json($validator->errors(), 400);
         }
 
         $dto = new ArticleDTO;

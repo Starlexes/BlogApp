@@ -1,12 +1,11 @@
 <?php
 
-// app/Http/Controllers/TranslateController.php
-
 namespace App\Http\Controllers;
 
 use App\Services\Translators\Interfaces\ITranslator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TranslateController extends Controller
 {
@@ -19,16 +18,21 @@ class TranslateController extends Controller
 
     public function translate(Request $request): JsonResponse
     {
-        $validated = $request->validate([
+        $data = $request->all();
+        $validator = Validator::make($data, [
             'text' => 'required|string',
             'source_lang' => 'required|string|size:2',
             'target_lang' => 'required|string|size:2',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
         $translated = $this->translator->translate(
-            $validated['text'],
-            $validated['source_lang'] ?? null,
-            $validated['target_lang'] ?? null,
+            $data['text'],
+            $data['source_lang'],
+            $data['target_lang'],
         );
 
         return response()->json([
