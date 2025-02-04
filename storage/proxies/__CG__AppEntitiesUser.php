@@ -19,7 +19,6 @@ class User extends \App\Entities\User implements \Doctrine\ORM\Proxy\InternalPro
     {
         $this->initializeLazyObject();
     }
-    
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
         "\0".'*'."\0".'appends' => [parent::class, 'appends', null],
@@ -100,14 +99,14 @@ class User extends \App\Entities\User implements \Doctrine\ORM\Proxy\InternalPro
     public function __serialize(): array
     {
         $properties = (array) $this;
-        unset($properties["\0" . self::class . "\0lazyObjectState"]);
+        unset($properties["\0".self::class."\0lazyObjectState"]);
 
         $data = [];
 
         foreach (parent::__sleep() as $name) {
             $value = $properties[$k = $name] ?? $properties[$k = "\0*\0$name"] ?? $properties[$k = "\0App\Entities\User\0$name"] ?? $k = null;
 
-            if (null === $k) {
+            if ($k === null) {
                 trigger_error(sprintf('serialize(): "%s" returned as member variable from __sleep() but does not exist', $name), \E_USER_NOTICE);
             } else {
                 $data[$k] = $value;

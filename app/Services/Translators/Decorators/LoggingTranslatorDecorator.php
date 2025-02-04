@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Translators\Decorators;
 
 use Illuminate\Support\Facades\Log;

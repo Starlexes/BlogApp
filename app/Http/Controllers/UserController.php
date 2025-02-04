@@ -1,105 +1,93 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use App\DTO\User\UserDTO;
 use App\Entities\User;
 use App\Factories\UserFactory;
+use App\Http\Formatter\User\UserFormatter;
+use App\Http\Requests\UserCreationRequest;
+use App\Services\User\DTO\UserDTO;
+use App\Services\User\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\EntityRepository;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function __construct(private readonly EntityManagerInterface $em) {}
+    /* @var UserRepository */
+    private readonly EntityRepository $userRepository;
+
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private readonly UserFormatter $userFormatter,
+
+    ) {
+        $this->userRepository = $this->em->getRepository(User::class);
+    }
 
     public function get(): JsonResponse
     {
-
-        return response()->json(User::all());
+        return response()->json($this->userRepository->getAll());
     }
 
-    /**
-     * @throws OptimisticLockException
-     * @throws ORMException
-     */
+    public function register(UserCreationRequest $request): JsonResponse
+    {
+        $dto = new UserDTO(
+            $request->getName(),
+            $request->getEmail(),
+            $request->getPassword(),
+        );
+
+        $user = UserFactory::create($dto);
+
+        $this->em->persist($user);
+        $this->em->flush();
+
+        return response()->json($this->userFormatter->format($user), 201);
+    }
+
+    public function update(UserCreationRequest $request, int $id): JsonResponse
+    {
+        $user = $this->userRepository->getById($id);
+
+        if (! $user) {
+            return response()->json('User not found', 404);
+        }
+
+        $dto = new UserDTO(
+            $request->getName(),
+            $request->getEmail(),
+            $request->getPassword(),
+        );
+
+        $user->setName($dto->getName())
+            ->setEmail($dto->getEmail())
+            ->setPassword(Hash::make($dto->getPassword()));
+
+        $this->em->persist($user);
+        $this->em->flush();
+
+        return response()->json($this->userFormatter->format($user));
+    }
+
     public function getById(int $id): JsonResponse
     {
-        $user = $this->em->find(User::class, $id);
+        $user = $this->userRepository->getById($id);
+
         if (! $user) {
             return response()->json('User not found', 404);
         }
 
-        return response()->json($user->getUserData());
+        return response()->json($this->userFormatter->format($user));
     }
 
-    public function register(Request $request): JsonResponse
-    {
-        $data = $request->all();
-        $validator = $this->validateUserData($data);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        $userFactory = new UserFactory;
-        $dto = new UserDTO;
-        $dto->fromArray($data);
-        $user = $userFactory::create($dto);
-
-        $this->em->persist($user);
-        $this->em->flush();
-
-        return response()->json($user->getUserData(), 201);
-    }
-
-    private function validateUserData(array $dto): \Illuminate\Validation\Validator
-    {
-        return Validator::make($dto, [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
-    }
-
-    /**
-     * @throws OptimisticLockException
-     * @throws ORMException
-     */
-    public function update(Request $request, int $id): JsonResponse
-    {
-        $data = $request->all();
-        $validator = $this->validateUserData($data);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-
-        $user = $this->em->find(User::class, $id);
-        if (! $user) {
-            return response()->json('User not found', 404);
-        }
-        $userFactory = new UserFactory;
-        $dto = new UserDTO;
-        $dto->fromArray($data);
-        $user = $userFactory::update($user, $dto);
-
-        $this->em->persist($user);
-        $this->em->flush();
-
-        return response()->json($user->getUserData());
-    }
-
-    /**
-     * @throws OptimisticLockException
-     * @throws ORMException
-     */
     public function destroy(int $id): JsonResponse
     {
-        $user = $this->em->find(User::class, $id);
+        $user = $this->userRepository->getById($id);
+
         if (! $user) {
             return response()->json('User not found', 404);
         }

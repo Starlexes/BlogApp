@@ -1,5 +1,7 @@
 <?php
 
+use LaravelDoctrine\ORM\Configuration\MetaData\Attributes;
+
 return [
 
     /*
@@ -30,7 +32,7 @@ return [
             'meta'          => env('DOCTRINE_METADATA', 'attributes'),
             'connection'    => env('DB_CONNECTION', 'mysql'),
             'paths'         => [
-                base_path('app/Entities')
+                app_path('Entities')
             ],
 
             'repository'    => Doctrine\ORM\EntityRepository::class,

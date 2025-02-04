@@ -1,47 +1,69 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entities;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use LaravelDoctrine\ORM\Auth\Authenticatable as AuthenticatableTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
-#[ORM\Table(name: 'users')]
-class User extends Authenticatable implements JWTSubject
+/**
+ * @ORM\Entity(repositoryClass="App\Services\User\Repository\UserRepository")
+ * @ORM\Table(name="users")
+ */
+class User implements JWTSubject
 {
-    use HasFactory, Notifiable;
+    use AuthenticatableTrait;
 
-    protected $fillable = ['id', 'name', 'email', 'password'];
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected string $password;
 
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="bigint", options={"unsigned"=true})
+     */
     private int $id;
 
-    #[ORM\Column(type: 'string')]
+    /**
+     * @ORM\Column(type="string")
+     */
     private string $name;
 
-    #[ORM\Column(type: 'string', unique: true)]
+    /**
+     * @ORM\Column(type="string", unique=true)
+     */
     private string $email;
 
-    #[ORM\Column(type: 'string')]
-    private string $password;
-
-    #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'user')]
+    /**
+     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="user")
+     */
     private Collection $articles;
+
+    public function __construct(
+        string $name,
+        string $email,
+        string $password
+    ) {
+        $this->name = $name;
+        $this->email = $email;
+        $this->password = $password;
+    }
 
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): void
+    public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
     }
 
     public function getArticles(): Collection
@@ -49,24 +71,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->articles;
     }
 
-    public function setArticles(Collection $articles): void
+    public function setArticles(Collection $articles): self
     {
         $this->articles = $articles;
+
+        return $this;
     }
 
     public function getJWTIdentifier(): int
     {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims(): array
-    {
-        return [];
-    }
-
-    public function getUserData(): array
-    {
-        return ['id' => $this->getId(), 'name' => $this->getName(), 'email' => $this->getEmail()];
+        return $this->getId();
     }
 
     public function getId(): int
@@ -74,9 +88,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->id;
     }
 
-    public function setId(int $id): void
+    public function setId(int $id): self
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getJWTCustomClaims(): array
+    {
+        return [];
     }
 
     public function getName(): string
@@ -84,9 +105,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
     }
 
     public function getEmail(): string
@@ -94,8 +117,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->email;
     }
 
-    public function setEmail(string $email): void
+    public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
     }
 }

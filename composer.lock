@@ -1596,16 +1596,16 @@
         },
         {
             "name": "guzzlehttp/uri-template",
-            "version": "v1.0.3",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/uri-template.git",
-                "reference": "ecea8feef63bd4fef1f037ecb288386999ecc11c"
+                "reference": "30e286560c137526eccd4ce21b2de477ab0676d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/uri-template/zipball/ecea8feef63bd4fef1f037ecb288386999ecc11c",
-                "reference": "ecea8feef63bd4fef1f037ecb288386999ecc11c",
+                "url": "https://api.github.com/repos/guzzle/uri-template/zipball/30e286560c137526eccd4ce21b2de477ab0676d2",
+                "reference": "30e286560c137526eccd4ce21b2de477ab0676d2",
                 "shasum": ""
             },
             "require": {
@@ -1662,7 +1662,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/uri-template/issues",
-                "source": "https://github.com/guzzle/uri-template/tree/v1.0.3"
+                "source": "https://github.com/guzzle/uri-template/tree/v1.0.4"
             },
             "funding": [
                 {
@@ -1678,20 +1678,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-03T19:50:20+00:00"
+            "time": "2025-02-03T10:55:03+00:00"
         },
         {
             "name": "laravel-doctrine/orm",
-            "version": "3.0.5",
+            "version": "3.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel-doctrine/orm.git",
-                "reference": "32b934ba344f491bacc0e2d24d38cecee3f3d530"
+                "reference": "27014738708afdaf0da24e2936b7f6b17661fbc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel-doctrine/orm/zipball/32b934ba344f491bacc0e2d24d38cecee3f3d530",
-                "reference": "32b934ba344f491bacc0e2d24d38cecee3f3d530",
+                "url": "https://api.github.com/repos/laravel-doctrine/orm/zipball/27014738708afdaf0da24e2936b7f6b17661fbc7",
+                "reference": "27014738708afdaf0da24e2936b7f6b17661fbc7",
                 "shasum": ""
             },
             "require": {
@@ -1779,9 +1779,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel-doctrine/orm/issues",
-                "source": "https://github.com/laravel-doctrine/orm/tree/3.0.5"
+                "source": "https://github.com/laravel-doctrine/orm/tree/3.0.6"
             },
-            "time": "2025-01-26T19:25:39+00:00"
+            "time": "2025-02-02T08:45:28+00:00"
         },
         {
             "name": "laravel/framework",

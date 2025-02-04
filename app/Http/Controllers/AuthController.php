@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
@@ -18,7 +20,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken((string) $token);
     }
 
     /**
