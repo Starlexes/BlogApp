@@ -9,6 +9,7 @@ use App\Entities\User;
 use App\Factories\ArticleFactory;
 use App\Http\Formatter\Article\ArticleFormatter;
 use App\Http\Requests\ArticleCreationRequest;
+use App\Http\Requests\ArticleDeletionRequest;
 use App\Http\Requests\ArticleUpdateRequest;
 use App\Services\Article\DTO\ArticleDTO;
 use App\Services\Article\Repository\ArticleRepository;
@@ -35,9 +36,14 @@ class ArticleController extends Controller
 
     public function get(): JsonResponse
     {
-        $all = $this->articleRepository->findAll();
+        $articles = $this->articleRepository->getAll();
+        $formattedArticles = [];
 
-        return response()->json($all);
+        foreach ($articles as $article) {
+            $formattedArticles[] = $this->articleFormatter->format($article);
+        }
+
+        return response()->json($formattedArticles);
     }
 
     public function create(ArticleCreationRequest $request): JsonResponse
@@ -62,7 +68,7 @@ class ArticleController extends Controller
         $article = $this->articleRepository->getById($id);
 
         if (! $article) {
-            return response()->json('User not found', 404);
+            return response()->json('Article not found', 404);
         }
 
         return response()->json($this->articleFormatter->format($article));
@@ -94,7 +100,7 @@ class ArticleController extends Controller
         return response()->json($this->articleFormatter->format($article));
     }
 
-    public function destroy(ArticleUpdateRequest $request, int $articleId): JsonResponse
+    public function destroy(ArticleDeletionRequest $request, int $articleId): JsonResponse
     {
         $article = $this->articleRepository->getById($articleId);
 
@@ -105,6 +111,6 @@ class ArticleController extends Controller
         $this->em->remove($article);
         $this->em->flush();
 
-        return response()->json($articleId, 204);
+        return response()->json(['id' => $articleId], 204);
     }
 }

@@ -86,7 +86,6 @@ class UserAuthProvider implements UserProvider
 
     public function rehashPasswordIfRequired(User|Authenticatable $user, string|array $credentials, bool $force = false): void
     {
-
         if (password_needs_rehash($user->getAuthPassword(), PASSWORD_DEFAULT)) {
             if (is_array($credentials)) {
                 $user->setPassword(Hash::make(($credentials['password'])));
@@ -96,6 +95,5 @@ class UserAuthProvider implements UserProvider
             $this->em->persist($user);
             $this->em->flush();
         }
-
     }
 }

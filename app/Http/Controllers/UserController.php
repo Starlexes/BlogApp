@@ -32,6 +32,7 @@ class UserController extends Controller
     {
         $users = $this->userRepository->getAll();
         $formattedUsers = [];
+
         foreach ($users as $user) {
             $formattedUsers[] = $this->userFormatter->format($user);
         }
@@ -100,6 +101,6 @@ class UserController extends Controller
         $this->em->remove($user);
         $this->em->flush();
 
-        return response()->json($id, 204);
+        return response()->json(['id' => $id], 204);
     }
 }

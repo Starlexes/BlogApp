@@ -7,13 +7,12 @@ namespace App\Http\Requests;
 use App\Entities\Article;
 use App\Services\Article\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
-class ArticleUpdateRequest extends FormRequest
+class ArticleDeletionRequest extends FormRequest
 {
     public function __construct(
         private readonly EntityManagerInterface $em
@@ -39,30 +38,13 @@ class ArticleUpdateRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-            'userId' => 'required|int',
+            //
         ];
-    }
-
-    public function getTitle(): string
-    {
-        return $this->input('title');
-    }
-
-    public function getContentText(): string
-    {
-        return $this->input('content');
-    }
-
-    public function getUserId(): int
-    {
-        return $this->input('userId');
     }
 
     protected function failedValidation(Validator $validator)
