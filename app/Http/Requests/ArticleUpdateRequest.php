@@ -4,19 +4,33 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Entities\Article;
+use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
-class ArticleCreationRequest extends FormRequest
+class ArticleUpdateRequest extends FormRequest
 {
+    public function __construct(
+        private readonly EntityManagerInterface $em
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        $user = Auth::guard('api')->user();
+        $articleRepository = $this->em->getRepository(Article::class);
+        $articleId = $this->route('id');
+        $article = $articleRepository->getById($articleId);
+
+        return $user && $user->getAuthIdentifier() === $article->getUser()->getId();
     }
 
     /**

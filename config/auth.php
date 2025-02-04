@@ -60,8 +60,12 @@ return [
     */
 
     'providers' => [
+        'doctrine' => [
+            'driver' => 'doctrine',
+            'model' => App\Entities\User::class,
+        ],
         'users' => [
-            'driver' => 'eloquent',
+            'driver' => 'doctrine',
             'model' => env('AUTH_MODEL', App\Entities\User::class),
         ],
 

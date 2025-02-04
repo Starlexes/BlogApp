@@ -272,6 +272,8 @@ return [
         |
         */
 
+        'user' => App\Services\User\Providers\UserAuthProvider::class,
+
         'jwt' => Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
 
         /*

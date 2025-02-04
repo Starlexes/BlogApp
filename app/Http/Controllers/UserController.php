@@ -30,7 +30,13 @@ class UserController extends Controller
 
     public function get(): JsonResponse
     {
-        return response()->json($this->userRepository->getAll());
+        $users = $this->userRepository->getAll();
+        $formattedUsers = [];
+        foreach ($users as $user) {
+            $formattedUsers[] = $this->userFormatter->format($user);
+        }
+
+        return response()->json($formattedUsers);
     }
 
     public function register(UserCreationRequest $request): JsonResponse

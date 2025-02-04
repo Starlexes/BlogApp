@@ -7,6 +7,9 @@ namespace App\Providers;
 use App\Services\Translators\Decorators\LoggingTranslatorDecorator;
 use App\Services\Translators\GoogleTranslateAdapter;
 use App\Services\Translators\Interfaces\ITranslator;
+use App\Services\User\Providers\UserAuthProvider;
+use Doctrine\ORM\EntityManagerInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -28,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Auth::provider('doctrine', function ($app, array $config) {
+            return new UserAuthProvider($app->make(EntityManagerInterface::class));
+        });
     }
 }

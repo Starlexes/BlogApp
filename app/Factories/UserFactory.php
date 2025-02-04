@@ -12,10 +12,11 @@ class UserFactory
 {
     public static function create(UserDTO $dto): User
     {
-        return new User(
-            $dto->getEmail(),
-            $dto->getEmail(),
-            Hash::make($dto->getPassword()),
-        );
+        $user = new User;
+        $user->setName($dto->getName())
+            ->setEmail($dto->getEmail())
+            ->setPassword(Hash::make($dto->getPassword()));
+
+        return $user;
     }
 }

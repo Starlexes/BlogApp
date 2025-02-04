@@ -5,66 +5,33 @@ declare(strict_types=1);
 namespace App\Entities;
 
 use Doctrine\Common\Collections\Collection;
-use LaravelDoctrine\ORM\Auth\Authenticatable as AuthenticatableTrait;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Doctrine\ORM\Mapping as ORM;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-/**
- * @ORM\Entity(repositoryClass="App\Services\User\Repository\UserRepository")
- * @ORM\Table(name="users")
- */
-class User implements JWTSubject
+#[ORM\Entity(repositoryClass: "App\Services\User\Repository\UserRepository")]
+#[ORM\Table(name: 'users')]
+class User implements Authenticatable, JWTSubject
 {
-    use AuthenticatableTrait;
-
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     protected string $password;
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="bigint", options={"unsigned"=true})
-     */
+    #[ORM\Column(name: 'remember_token', type: 'string', nullable: true)]
+    private string $rememberToken;
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'bigint', options: ['unsigned' => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: 'string')]
     private string $name;
 
-    /**
-     * @ORM\Column(type="string", unique=true)
-     */
+    #[ORM\Column(type: 'string', unique: true)]
     private string $email;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="user")
-     */
+    #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'user')]
     private Collection $articles;
-
-    public function __construct(
-        string $name,
-        string $email,
-        string $password
-    ) {
-        $this->name = $name;
-        $this->email = $email;
-        $this->password = $password;
-    }
-
-    public function getPassword(): string
-    {
-        return $this->password;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
 
     public function getArticles(): Collection
     {
@@ -122,5 +89,54 @@ class User implements JWTSubject
         $this->email = $email;
 
         return $this;
+    }
+
+    public function getRememberToken(): string
+    {
+        return $this->rememberToken;
+    }
+
+    public function setRememberToken($value): self
+    {
+        $this->rememberToken = $value;
+
+        return $this;
+    }
+
+    public function getRememberTokenName(): string
+    {
+        return 'rememberToken';
+    }
+
+    public function getAuthIdentifierName(): string
+    {
+        return 'id';
+    }
+
+    public function getAuthIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    public function getAuthPassword(): string
+    {
+        return $this->getPassword();
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    public function getAuthPasswordName(): string
+    {
+        return 'password';
     }
 }

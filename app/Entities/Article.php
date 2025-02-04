@@ -3,34 +3,25 @@
 declare(strict_types=1);
 
 namespace App\Entities;
+use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Table(name="articles")
- * @ORM\Entity(repositoryClass="App\Services\Article\Repository\ArticleRepository")
- */
+#[ORM\Table(name: "articles")]
+#[ORM\Entity(repositoryClass: "App\Services\Article\Repository\ArticleRepository")]
 class Article
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="bigint", options={"unsigned"=true})
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "bigint", options: ["unsigned" => true])]
     private int $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column(type: "string")]
     private string $title;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: "text")]
     private string $content;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="articles")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "articles")]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id")]
     private User $user;
 
     public function __construct(

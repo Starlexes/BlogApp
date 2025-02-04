@@ -9,6 +9,7 @@ use App\Entities\User;
 use App\Factories\ArticleFactory;
 use App\Http\Formatter\Article\ArticleFormatter;
 use App\Http\Requests\ArticleCreationRequest;
+use App\Http\Requests\ArticleUpdateRequest;
 use App\Services\Article\DTO\ArticleDTO;
 use App\Services\Article\Repository\ArticleRepository;
 use App\Services\User\Repository\UserRepository;
@@ -67,7 +68,7 @@ class ArticleController extends Controller
         return response()->json($this->articleFormatter->format($article));
     }
 
-    public function update(ArticleCreationRequest $request, int $articleId): JsonResponse
+    public function update(ArticleUpdateRequest $request, int $articleId): JsonResponse
     {
         $dto = new ArticleDTO(
             $request->getTitle(),
@@ -93,7 +94,7 @@ class ArticleController extends Controller
         return response()->json($this->articleFormatter->format($article));
     }
 
-    public function destroy(ArticleCreationRequest $request, int $articleId): JsonResponse
+    public function destroy(ArticleUpdateRequest $request, int $articleId): JsonResponse
     {
         $article = $this->articleRepository->getById($articleId);
 
