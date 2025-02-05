@@ -14,7 +14,6 @@ class AuthController extends Controller
 {
     public function __construct(
         private readonly UserFormatter $userFormatter,
-
     ) {}
 
     public function login(Request $request): JsonResponse

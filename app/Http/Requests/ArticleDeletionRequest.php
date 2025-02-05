@@ -29,7 +29,9 @@ class ArticleDeletionRequest extends FormRequest
 
         /** @var ArticleRepository $articleRepository */
         $articleRepository = $this->em->getRepository(Article::class);
+
         $articleId = $this->route('id');
+
         $article = $articleRepository->getById($articleId);
 
         return $user && $user->getAuthIdentifier() === $article->getUser()->getId();

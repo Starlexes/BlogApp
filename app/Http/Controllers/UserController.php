@@ -23,7 +23,6 @@ class UserController extends Controller
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly UserFormatter $userFormatter,
-
     ) {
         $this->userRepository = $this->em->getRepository(User::class);
     }
@@ -98,6 +97,7 @@ class UserController extends Controller
         if (! $user) {
             return response()->json('User not found', 404);
         }
+
         $this->em->remove($user);
         $this->em->flush();
 
